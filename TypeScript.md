@@ -216,20 +216,134 @@ function greet(name: string = "Invité", age: number = 30): string {
   return `Bonjour ${name}, vous avez ${age} ans.`;
 }
 ```
-
-
-
-
 ### Cas réel
 
 API qui peut renvoyer plusieurs formats -> union types
 
+
+
+
+# Programmation Orientée Objet
+
+Les principaux objectifs de cette partie sont de découvrir :
+
+- Le potentiel de TypeScript sur l'aspect "orienté objet"
+- Les classes, instances, constructeurs, ...
+
+
+Le langage ES2015 apporte (vis-à-vis de ES5) de nouveaux mots-clefs (class, constructor, extends, ...) pour obtenir un code orienté objet plus lisible et mieux structuré.
+
+Le langage TypeScript (en tant que sur-ensemble de ES2015) ajoute à son tour de nouveaux mots-clefs (abstract, public / private, interface, ...) pour obtenir un meilleur code orienté objet.
+
+- Syntaxes orientées objet supportées à-peu-près de la même façon entre TypeScript et ES2015 :
+  + Mots-clefs `class` et `constructor`
+  + `static`
+  + Mots-clefs `get` et `set`
+  + Héritage (`extends`, `super`, ...)
+  + `Object.assign(...)`
+
+ Syntaxes orientées objet parfaitement supportées que par **TypeScript** :
+  + Mot-clef `abstract` (classes abstraites)
+  + `interface`, `implements`, ...
+  + `public`, `private`, `protected`, ...
+  + `public`, `private` ou `protected` au niveau des paramètres d'un constructeur pour définir automatiquement certaines variables d'instances (attributs)
+
 ## Objets, interfaces & classes
 
-### Objectifs
+### Classes
 
-- Structurer des données
-- Comprendre le cœur de TypeScript
+```TypeScript
+class Compte{
+    numero : number;
+    label : string;
+    solde : number;
+
+    debiter(montant : number) : void {
+        this.solde -= montant; // this.solde = this.solde - montant;
+    }
+
+    crediter(montant : number) : void {
+        this.solde += montant; // this.solde = this.solde + montant;
+    }
+}​
+```
+Sans initialisation explicite (via constructeur ou autre), les propriétés internes d'un objet sont par défaut à la valeur `undefined`. Lorsque `tsconfig.json` comporte la ligne d'option `"strict": true,`, ceci ne fonctionne qu'avec l'option complémentaire `"strictPropertyInitialization": false`.
+
+```TypeScript
+var c1 = new Compte(); //instance (exemplaire) 1
+console.log("numero et label de c1: " + c1.numero + " " + c1.label);
+console.log("solde de c1: " + c1.solde);
+var c2 = new Compte(); //instance (exemplaire) 2
+c2.solde = 100.0;
+c2.crediter(50.0);
+console.log("solde de c2: " + c2.solde);  //150.0​
+```
+**ATTENTION**: le préfixe this. doit toujours être explicité.
+
+#### Valeurs par défaut
+
+La syntaxe `= valeur_par_défaut` peut être utilisée au niveau des **propriétés / attributs** d'une classe et au niveau des paramètres des méthodes ou des fonctions.
+
+```TypeScript
+class Ctx{
+    title : string = "default_title";
+    prefixer(s :string , prefixe :string =">>>" ) : string{
+        return prefixe + s;
+    }
+}
+```
+
+#### Constructeur 
+
+Un constructeur est une méthode qui sert à initialiser les valeurs internes d'une instance dès sa construction (dès l'appel à `new`).
+
+En langage TypeScript, le constructeur se programme comme la méthode spéciale constructor (mot-clef des langages ES2015 et TypeScript) :
+
+```TypeScript
+class Compte{
+    numero : number;
+    label: string;
+    solde : number;
+
+    constructor(numero:number, libelle:string, soldeInitial:number){
+        this.numero = numero;
+        this.label = libelle;
+        this.solde = soldeInitial;
+    }
+
+    //...
+}​
+```
+
+```TypeScript
+var c1 = new Compte(1,"compte 1",100.0);
+c1.crediter(50.0);
+console.log("solde de c1: " + c1.solde);​
+```
+
+**ATTENTION**: le langage TypeScript ne supporte pas la surchage de fonction.
+
+```TypeScript
+class Compte{
+    numero : number;
+    label: string;
+    solde : number;
+
+    constructor(numero:number=0, libelle:string="?", soldeInitial:number=0.0){
+        this.numero = numero;
+        this.label = libelle;
+        this.solde = soldeInitial;
+    }//...
+}​
+```
+
+```TypeScript
+var c1 = new Compte(1,"compte 1",100.0);
+var c2 = new Compte(2,"compte 2");
+var c3 = new Compte(3);
+var c4 = new Compte();​
+```
+
 
 ### Interfaces
 
@@ -245,17 +359,7 @@ interface User {
 - Propriétés optionnelles
 - Readonly
 
-### Classes
 
-```TypeScript
-class UserService {
-  constructor(private users: User[]) {}
-
-  getUser(id: number): User | undefined {
-    return this.users.find(u => u.id === id)
-  }
-}
-```
 
 ### Message clé
 
