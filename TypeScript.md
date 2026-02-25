@@ -6,7 +6,7 @@
 - Déconstruire les idées reçues
 - Comprendre la valeur ajoutée par rapport à JavaScript
 
-![alt text](JavascriptVersions.png)
+![alt text](imgs/JavascriptVersions.png)
 
 ### Contenu
 
@@ -90,12 +90,12 @@ tsc --init
 - Comprendre l’inférence
 
 |Types      |	Exemple(s) ou signification(s)                                                      |
-|:----------|:--------------------------------------------------------------------------------------|
+|:----------|:------------------------------------------------------------------------------------|
 |:boolean   |	let isDone :boolean = false;                                                        |
 |:number    |	let height :number = 6; ou let size :number = 1.83;                                 |
 |:string    |	let name :string = "bob"; ou name = 'smith';                                        |
 |:Array     |	let list1 :number[] = [1, 2, 3]; ou let list2 :Array<number> = [1, 2, 3];           |
-|enum       |	Énumération                                                                         |
+| enum      |	Énumération                                                                       |
 |:any       |	let notSure :any = 4; ou notSure = "maybe a string instead"; ou notSure = false;    |
 |:void      |	function warnUser() :void { alert("This is my warning message"); }                  |
 |:object    |	Objet quelconque : plus précis que any, moins précis qu'un nom de classe            |
@@ -107,15 +107,54 @@ tsc --init
     - number, string, boolean
     - null, undefined
 
-- Tableaux :
+- Enumeration :
 ```TypeScript
-let ids: number[] = [1, 2, 3]
+enum Color {Red, Green, Blue}; // start at 0 by default 
+// enum Color {Red = 1, Green, Blue}; 
+let c: Color = Color.Green;  //display as "1" by default 
+let colorName: string = Color[1]; 
+// "Green" if "Red" is at [0]
+// Color["Green"] return 1​
 ```
 
-- Tuples :
+- Objet :
 ```TypeScript
-let user: [string, number]
+let obj : object = { id : 2  , label : "cahier" } ; 
+obj = { prenom : "jean" , nom : "Bon" } ; 
+//structure objet différente acceptée​
 ```
+
+- Cohérence ou d'incohérence de type : :
+```TypeScript
+function greet(person : string): string {
+    return "Hello, " + person;
+}
+let userName = "Power User";
+//i=0; //manque var (erreur détectée par tsc)
+
+let msg = "";
+//msg = greeterString(123456); 
+//123456 incompatible avec type string (erreur détectée par tsc)
+
+msg = greet(userName);
+console.log(msg);​
+```
+
+- Tableau :
+```TypeScript
+let var tableau :string[] = new Array<string>();
+tableau.push("abc");​
+```
+```TypeScript
+let jours : string[];
+jours = [ "lundi" , "mardi" , "mercredi" , "jeudi" , "vendredi" ];
+jours.push("samedi"); jours.push("dimanche");
+for(const [i,jour] of jours.entries()){
+    let j=jour.toUpperCase();
+    console.log( `jour ${i} : ${j}`);
+}
+```
+
 
 - `any` vs `unknown` (important)
 - Inférence automatique :
@@ -162,14 +201,25 @@ function log(message: string, level?: string) {}
 
 - Types union :
 ```TypeScript
+// Deux types supportés
 let id: number | string
+// Précision sur des valeurs possibles de variables 
+dialect : "mssql" | "mysql" | "postgres" | "sqlite" | "mariadb";​
 ```
 
-Valeurs par défaut + types
+- Valeurs par défaut + types :
 
 ```TypeScript
-TODO AJOUTER EXEMPLE
+unite : string | undefined; // string ou bien undefined​
+
+function greet(name: string = "Invité", age: number = 30): string {
+  return `Bonjour ${name}, vous avez ${age} ans.`;
+}
 ```
+
+
+
+
 ### Cas réel
 
 API qui peut renvoyer plusieurs formats -> union types
